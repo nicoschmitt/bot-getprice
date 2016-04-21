@@ -7,7 +7,7 @@ if (!mongo) {
 }
 
 var mongoose = require("mongoose");
-mongoose.connect(mongo);
+mongoose.connect(process.env.MONGO_URI);
 
 var restify = require('restify');
 var builder = require('botbuilder');
