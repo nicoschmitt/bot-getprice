@@ -9,6 +9,8 @@
     "botbuilder": "^0.9.1",
     "botconnector": "^0.9.6",
     "dotenv": "^2.0.0",
+    "mongodb": "^2.1.16",
+    "mongoose": "^4.4.12",
     "restify": "^4.0.4"
   }
 }

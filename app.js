@@ -1,5 +1,14 @@
 require('dotenv').config({silent: true});
 
+var mongo = process.env.BOT_APP_ID;
+if (!mongo) {
+    console.log("Missing configuration. Exiting.");
+    process.exit();
+}
+
+var mongoose = require("mongoose");
+mongoose.connect(mongo);
+
 var restify = require('restify');
 var builder = require('botbuilder');
 
@@ -42,6 +51,6 @@ bot.add("/", luis);
 
 var server = restify.createServer();
 server.post('/api/messages', bot.verifyBotFramework(), bot.listen());
-server.listen(process.env.port || 8080, function () {
+server.listen(process.env.PORT || 8080, process.env.IP || "0.0.0.0", function () {
     console.log('%s listening to %s', server.name, server.url); 
 });
