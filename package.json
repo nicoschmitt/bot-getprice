@@ -2,9 +2,12 @@
   "name": "bot-getprice",
   "version": "1.0.0",
   "description": "",
-  "main": "app.js",
   "author": "Nicolas Schmitt",
   "license": "MIT",
+  "engines": {
+    "node": "5.10.1"
+  },
+  "main": "server.js",
   "dependencies": {
     "botbuilder": "^0.9.1",
     "botconnector": "^0.9.6",
