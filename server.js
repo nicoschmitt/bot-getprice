@@ -1,10 +1,12 @@
 require('dotenv').config({silent: true});
 
-var mongo = process.env.BOT_APP_ID;
-if (!mongo) {
+var appId = process.env.BOT_APP_ID;
+if (!appId) {
     console.log("Missing configuration. Exiting.");
     process.exit();
 }
+
+console.log("Starting " + appId);
 
 var mongoose = require("mongoose");
 mongoose.connect(process.env.MONGO_URI);
@@ -12,7 +14,7 @@ mongoose.connect(process.env.MONGO_URI);
 var restify = require('restify');
 var builder = require('botbuilder');
 
-var bot = new builder.BotConnectorBot({ appId: process.env.BOT_APP_ID, appSecret: process.env.BOT_APP_SECRET });
+var bot = new builder.BotConnectorBot({ appId: appId, appSecret: process.env.BOT_APP_SECRET });
 
 bot.on("BotAddedToConversation", function(message) {
     var user = message.participants.filter(u => !u.isBot)[0];
@@ -22,6 +24,7 @@ bot.on("BotAddedToConversation", function(message) {
 var luis = new builder.LuisDialog(process.env.LUIS_API);
 
 luis.onDefault(function(session) {
+    console.log("Hi to " + session.message.from.name + ' (channel=' + session.message.from.channelId + ')');
     session.send("Hi I'm a price bot, ask me about products.");
 });
 
