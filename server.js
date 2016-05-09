@@ -24,7 +24,7 @@ bot.on("BotAddedToConversation", function(message) {
 var luis = new builder.LuisDialog(process.env.LUIS_API);
 
 luis.onDefault(function(session) {
-    console.log("Hi to " + session.message.from.name + ' (channel=' + session.message.from.channelId + ')');
+    console.log("Hi to " + session.message.from.name + " (channel=' + session.message.from.channelId + ')");
     session.send("Hi I'm a price bot, ask me about products.");
 });
 

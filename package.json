@@ -9,11 +9,11 @@
   },
   "main": "server.js",
   "dependencies": {
-    "botbuilder": "^0.9.1",
+    "botbuilder": "^0.9.2",
     "botconnector": "^0.9.6",
     "dotenv": "^2.0.0",
-    "mongodb": "^2.1.16",
-    "mongoose": "^4.4.12",
+    "mongodb": "^2.1.18",
+    "mongoose": "^4.4.15",
     "restify": "^4.0.4"
   }
 }
