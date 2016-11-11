@@ -20,8 +20,7 @@ var connector = new builder.ChatConnector({
 });
 var bot = new builder.UniversalBot(connector);
 
-var LuisRecognizer = require("./Luis2Recognizer").LuisRecognizer;
-var recognizer = new LuisRecognizer(process.env.LUIS_API);
+var recognizer = new builder.LuisRecognizer(process.env.LUIS_API);
 var dialog = new builder.IntentDialog({ recognizers: [recognizer] });
 bot.dialog("/", dialog);
 
@@ -57,9 +56,7 @@ dialog.matches("GetPrice", function(session, args) {
     session.sendTyping();
     
     setTimeout(function() {
-        
         session.endDialog('Here it is: 4€');
-
     }, 10 * 1000);
 });
 

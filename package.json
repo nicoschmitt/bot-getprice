@@ -5,7 +5,7 @@
   "author": "Nicolas Schmitt",
   "license": "MIT",
   "engines": {
-    "node": "5.10.1"
+    "node": "6.9.1"
   },
   "main": "server.js",
   "dependencies": {
