@@ -1,12 +1,12 @@
 require('dotenv').config({silent: true});
 
-var appId = process.env.BOT_APP_ID;
+var appId = process.env.BOT_NAME;
 if (!appId) {
     console.log("Missing configuration. Exiting.");
     process.exit();
 }
 
-console.log("Starting " + appId);
+console.log("Starting " + process.env.BOT_NAME);
 
 var mongoose = require("mongoose");
 mongoose.connect(process.env.MONGO_URI);
@@ -14,46 +14,61 @@ mongoose.connect(process.env.MONGO_URI);
 var restify = require('restify');
 var builder = require('botbuilder');
 
-var bot = new builder.BotConnectorBot({ appId: appId, appSecret: process.env.BOT_APP_SECRET });
+var connector = new builder.ChatConnector({
+    appId: process.env.MICROSOFT_APP_ID,
+    appPassword: process.env.MICROSOFT_APP_PASSWORD
+});
+var bot = new builder.UniversalBot(connector);
 
-bot.on("BotAddedToConversation", function(message) {
-    var user = message.participants.filter(u => !u.isBot)[0];
-    console.log("Chat with " + user.name);
+var LuisRecognizer = require("./Luis2Recognizer").LuisRecognizer;
+var recognizer = new LuisRecognizer(process.env.LUIS_API);
+var dialog = new builder.IntentDialog({ recognizers: [recognizer] });
+bot.dialog("/", dialog);
+
+// Greetings
+
+dialog.matchesAny([/^hi$/i, /^hello$/i, /^bonjour$/i], "/hello");
+bot.dialog("/hello", function(session) {
+    console.log(`Hi to ${session.message.user.name} (channel=${session.message.address.channelId})`);
+    session.send(`Hi ${session.message.user.name}. I'm a price bot, ask me about products. For example: 'what is the price of E3?'.`);
+    session.endDialog();
 });
 
-var luis = new builder.LuisDialog(process.env.LUIS_API);
+// Language recognition
 
-luis.onDefault(function(session) {
-    console.log("Hi to " + session.message.from.name + " (channel=' + session.message.from.channelId + ')");
-    session.send("Hi I'm a price bot, ask me about products.");
-});
+dialog.matches("GetPrice", function(session, args) {
 
-luis.on("get", function(session, args) {
-    var msg = session.message.text;
-    var intent = args.intents[0];
-    var actions = intent.actions.filter(a => a.triggered);
-    if (actions.length) {
-        var action = actions[0];
-        if (action.name == "get") {
-            var product = builder.EntityRecognizer.findEntity(args.entities, 'product').entity;
-            var discount = builder.EntityRecognizer.findEntity(args.entities, 'builtin.percentage');
-            if (discount == null) {
-                discount = 0;
-            } else {
-                discount = +discount.entity.replace(/[^0-9]/g, "");
-            }
-            
-            return session.send("Ok. Sending you the price of %s at %s %% discount.", product, discount);
-        }
+    var product = builder.EntityRecognizer.findEntity(args.entities, 'product');
+    var discount = builder.EntityRecognizer.findEntity(args.entities, 'builtin.percentage');
+
+    if (!product) {
+        session.endDialog("Sorry I did not get what you asked me. Try again.");
+        return;
     }
+
+    product = product.entity;
+    if (discount == null) {
+        discount = 0;
+    } else {
+        discount = +discount.entity.replace(/[^0-9]/g, "");
+    }
+
+    session.send("Ok. Searching for the price of %s at %s %% discount.", product, discount);
+    session.sendTyping();
     
-    session.send("Sorry I did not get what you asked me. Try again.");
+    setTimeout(function() {
+        
+        session.endDialog('Here it is: 4€');
+
+    }, 10 * 1000);
 });
 
-bot.add("/", luis);
+dialog.onDefault("/hello");
+
+// Start server
 
 var server = restify.createServer();
-server.post('/api/messages', bot.verifyBotFramework(), bot.listen());
+server.post('/api/messages', connector.listen());
 server.listen(process.env.PORT || 8080, process.env.IP || "0.0.0.0", function () {
     console.log('%s listening to %s', server.name, server.url); 
 });

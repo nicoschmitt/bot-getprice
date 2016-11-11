@@ -1,0 +1,275 @@
+{
+  "luis_schema_version": "1.3.0",
+  "name": "bot-getprice",
+  "desc": "",
+  "culture": "en-us",
+  "intents": [
+    {
+      "name": "get"
+    },
+    {
+      "name": "None"
+    }
+  ],
+  "entities": [
+    {
+      "name": "product"
+    }
+  ],
+  "composites": [],
+  "bing_entities": [
+    "percentage"
+  ],
+  "actions": [
+    {
+      "actionName": "get",
+      "intentName": "get",
+      "channel": null,
+      "actionParameters": [
+        {
+          "parameterName": "product",
+          "entityName": "product",
+          "required": true,
+          "question": null,
+          "phraseListFeatureName": null
+        },
+        {
+          "parameterName": "percent",
+          "entityName": "percentage",
+          "required": false,
+          "question": null,
+          "phraseListFeatureName": null
+        }
+      ]
+    }
+  ],
+  "model_features": [],
+  "regex_features": [],
+  "utterances": [
+    {
+      "text": "get me the price of e1",
+      "intent": "get",
+      "entities": [
+        {
+          "entity": "product",
+          "startPos": 5,
+          "endPos": 5
+        }
+      ]
+    },
+    {
+      "text": "what is the price of e1",
+      "intent": "get",
+      "entities": [
+        {
+          "entity": "product",
+          "startPos": 5,
+          "endPos": 5
+        }
+      ]
+    },
+    {
+      "text": "get me the price of e3",
+      "intent": "get",
+      "entities": [
+        {
+          "entity": "product",
+          "startPos": 5,
+          "endPos": 5
+        }
+      ]
+    },
+    {
+      "text": "get me the price of e5 at 10% discount",
+      "intent": "get",
+      "entities": [
+        {
+          "entity": "product",
+          "startPos": 5,
+          "endPos": 5
+        }
+      ]
+    },
+    {
+      "text": "hi. i need e5 at 10%",
+      "intent": "get",
+      "entities": [
+        {
+          "entity": "product",
+          "startPos": 4,
+          "endPos": 4
+        }
+      ]
+    },
+    {
+      "text": "hi",
+      "intent": "None",
+      "entities": []
+    },
+    {
+      "text": "i need the price of exchange online at 10%",
+      "intent": "get",
+      "entities": [
+        {
+          "entity": "product",
+          "startPos": 5,
+          "endPos": 6
+        }
+      ]
+    },
+    {
+      "text": "i want e4 at 5%",
+      "intent": "get",
+      "entities": [
+        {
+          "entity": "product",
+          "startPos": 2,
+          "endPos": 2
+        }
+      ]
+    },
+    {
+      "text": "i need the price of exo p1",
+      "intent": "get",
+      "entities": [
+        {
+          "entity": "product",
+          "startPos": 5,
+          "endPos": 6
+        }
+      ]
+    },
+    {
+      "text": "give me the price of exchange online at 10% please",
+      "intent": "get",
+      "entities": [
+        {
+          "entity": "product",
+          "startPos": 5,
+          "endPos": 6
+        }
+      ]
+    },
+    {
+      "text": "give me the price of e1 at 10% please",
+      "intent": "get",
+      "entities": [
+        {
+          "entity": "product",
+          "startPos": 5,
+          "endPos": 5
+        }
+      ]
+    },
+    {
+      "text": "give me the price for e1 at 10%",
+      "intent": "get",
+      "entities": [
+        {
+          "entity": "product",
+          "startPos": 5,
+          "endPos": 5
+        }
+      ]
+    },
+    {
+      "text": "give me the price of e1",
+      "intent": "get",
+      "entities": [
+        {
+          "entity": "product",
+          "startPos": 5,
+          "endPos": 5
+        }
+      ]
+    },
+    {
+      "text": "i need the price of exo p1 at 10% discount",
+      "intent": "get",
+      "entities": [
+        {
+          "entity": "product",
+          "startPos": 5,
+          "endPos": 6
+        }
+      ]
+    },
+    {
+      "text": "i need the price of skype broadcast",
+      "intent": "get",
+      "entities": [
+        {
+          "entity": "product",
+          "startPos": 5,
+          "endPos": 6
+        }
+      ]
+    },
+    {
+      "text": "i need the price of onedrive",
+      "intent": "get",
+      "entities": [
+        {
+          "entity": "product",
+          "startPos": 5,
+          "endPos": 5
+        }
+      ]
+    },
+    {
+      "text": "i need the price of exchange online archiving",
+      "intent": "get",
+      "entities": [
+        {
+          "entity": "product",
+          "startPos": 5,
+          "endPos": 7
+        }
+      ]
+    },
+    {
+      "text": "i need the price of exchange online archiving please",
+      "intent": "get",
+      "entities": [
+        {
+          "entity": "product",
+          "startPos": 5,
+          "endPos": 7
+        }
+      ]
+    },
+    {
+      "text": "i need exchange online archiving",
+      "intent": "get",
+      "entities": [
+        {
+          "entity": "product",
+          "startPos": 2,
+          "endPos": 4
+        }
+      ]
+    },
+    {
+      "text": "i need the price of cloudpbx",
+      "intent": "get",
+      "entities": [
+        {
+          "entity": "product",
+          "startPos": 5,
+          "endPos": 5
+        }
+      ]
+    },
+    {
+      "text": "i need the price of cloudpbx at 20% discount",
+      "intent": "get",
+      "entities": [
+        {
+          "entity": "product",
+          "startPos": 5,
+          "endPos": 5
+        }
+      ]
+    }
+  ]
+}
