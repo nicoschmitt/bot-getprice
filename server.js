@@ -28,8 +28,9 @@ bot.dialog("/", dialog);
 
 dialog.matchesAny([/^hi$/i, /^hello$/i, /^bonjour$/i], "/hello");
 bot.dialog("/hello", function(session) {
-    console.log(`Hi to ${session.message.user.name} (channel=${session.message.address.channelId})`);
-    session.send(`Hi ${session.message.user.name}. I'm a price bot, ask me about products. For example: 'what is the price of E3?'.`);
+    var user = session.message.user.name || "mister";
+    console.log(`Hi to ${user} (channel=${session.message.address.channelId})`);
+    session.send(`Hi ${user}. I'm a price bot, ask me about products. For example: 'what is the price of E3?'.`);
     session.endDialog();
 });
 
@@ -52,11 +53,17 @@ dialog.matches("GetPrice", function(session, args) {
         discount = +discount.entity.replace(/[^0-9]/g, "");
     }
 
-    session.send("Ok. Searching for the price of %s at %s %% discount.", product, discount);
+    var msg = new builder.Message(session)
+                        .textFormat(builder.TextFormat.markdown)
+                        .text("Ok. Searching for the price of **%s** at **%s** %% discount.", product, discount)
+    session.send(msg);
     session.sendTyping();
     
     setTimeout(function() {
-        session.endDialog('Here it is: 4€');
+        var msg = new builder.Message(session)
+                             .textFormat(builder.TextFormat.markdown)
+                             .text("'Here it is: **4€**'");
+        session.endDialog(msg);
     }, 10 * 1000);
 });
 
@@ -66,6 +73,6 @@ dialog.onDefault("/hello");
 
 var server = restify.createServer();
 server.post('/api/messages', connector.listen());
-server.listen(process.env.PORT || 8080, process.env.IP || "0.0.0.0", function () {
+server.listen(process.env.PORT || 3978, process.env.IP || "0.0.0.0", function () {
     console.log('%s listening to %s', server.name, server.url); 
 });
