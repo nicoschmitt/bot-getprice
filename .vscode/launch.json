@@ -22,10 +22,10 @@
 			"outDir": null
 		},
 		{
-			"name": "Launch with proxy",
+			"name": "Launch Import",
 			"type": "node",
 			"request": "launch",
-			"program": "${workspaceRoot}\\server.js",
+			"program": "${workspaceRoot}\\import-price.js",
 			"stopOnEntry": false,
 			"args": [],
 			"cwd": "${workspaceRoot}",
@@ -35,26 +35,10 @@
 				"--nolazy"
 			],
 			"env": {
-				"NODE_ENV": "development",
-				"HTTP_PROXY": "http://localhost:8888",
-				"HTTPS_PROXY": "http://localhost:8888",
-				"NODE_TLS_REJECT_UNAUTHORIZED": 0
 			},
 			"externalConsole": false,
 			"sourceMaps": false,
 			"outDir": null
-		},
-		{
-			"name": "Attach",
-			"type": "node",
-			"request": "attach",
-			"port": 5858,
-			"address": "localhost",
-			"restart": false,
-			"sourceMaps": false,
-			"outDir": null,
-			"localRoot": "${workspaceRoot}",
-			"remoteRoot": null
 		}
 	]
 }
