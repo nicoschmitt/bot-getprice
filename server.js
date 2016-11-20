@@ -6,13 +6,20 @@ if (!appId) {
     process.exit();
 }
 
-console.log("Starting " + process.env.BOT_NAME);
+var Promise     = require("bluebird");
+var logger      = require('winston');
+var mongoose    = require("mongoose");
+var restify     = require('restify');
+var builder     = require('botbuilder');
 
-var mongoose = require("mongoose");
-mongoose.connect(process.env.MONGO_URI);
+logger.level = process.env.LOG_LEVEL || "info";
 
-var restify = require('restify');
-var builder = require('botbuilder');
+Promise.promisifyAll(mongoose);
+mongoose.Promise = Promise;
+
+logger.info("Starting " + process.env.BOT_NAME);
+
+var Price = require("./models/price.model");
 
 var connector = new builder.ChatConnector({
     appId: process.env.MICROSOFT_APP_ID,
@@ -29,7 +36,7 @@ bot.dialog("/", dialog);
 dialog.matchesAny([/^hi$/i, /^hello$/i, /^bonjour$/i], "/hello");
 bot.dialog("/hello", function(session) {
     var user = session.message.user.name || "mister";
-    console.log(`Hi to ${user} (channel=${session.message.address.channelId})`);
+    logger.debug(`Hi to ${user} (channel=${session.message.address.channelId})`);
     session.send(`Hi ${user}. I'm a price bot, ask me about products. For example: 'what is the price of E3?'.`);
     session.endDialog();
 });
@@ -55,24 +62,38 @@ dialog.matches("GetPrice", function(session, args) {
 
     var msg = new builder.Message(session)
                         .textFormat(builder.TextFormat.markdown)
-                        .text("Ok. Searching for the price of **%s** at **%s** %% discount.", product, discount)
+                        .text("Ok. Searching for the price of **%s**%s.", product, discount == 0 ? "" : ` at ${discount}% discount`)
     session.send(msg);
     session.sendTyping();
-    
-    setTimeout(function() {
-        var msg = new builder.Message(session)
-                             .textFormat(builder.TextFormat.markdown)
-                             .text("'Here it is: **4€**'");
-        session.endDialog(msg);
-    }, 10 * 1000);
+
+    product = product.trim().toLowerCase().replace(/\s/g, "");
+
+    Price.findOne({ product: product }).select("product A B C D").lean().exec().then(price => {
+        if (price) {
+            var msg = new builder.Message(session)
+                                .textFormat(builder.TextFormat.markdown)
+                                .text("**A**: %s€\r\n  **B**: %s€\r\n  **C**: %s€\r\n  **D**: %s€", price.A, price.B, price.C, price.D);
+            session.endDialog(msg);
+        } else {
+            logger.warn("Product not found: " + product);
+            session.endDialog("Sorry I don't know this product. Try again.");
+        }
+    })
+
 });
 
 dialog.onDefault("/hello");
 
 // Start server
 
-var server = restify.createServer();
-server.post('/api/messages', connector.listen());
-server.listen(process.env.PORT || 3978, process.env.IP || "0.0.0.0", function () {
-    console.log('%s listening to %s', server.name, server.url); 
+mongoose.connect(process.env.MONGO_URI).then(() => {
+
+    logger.info("Starting api server...");
+    var server = restify.createServer();
+    server.post('/api/messages', connector.listen());
+    server.listen(process.env.PORT || 3978, process.env.IP || "0.0.0.0", function () {
+        logger.info('%s listening to %s', server.name, server.url); 
+    });
+
 });
+

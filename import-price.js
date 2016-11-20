@@ -37,8 +37,11 @@ fs.readFileAsync(process.env.PRICE_CSV_FILE, "utf8").then(data => {
     logger.info("Data cleaned.");
     return Promise.map(rows, row => {
         // normalize data...
-        row.product = row.product.trim().toLowerCase();
-        row.price = +(row.price.replace(",", "."));
+        row.product = row.product.trim().toLowerCase().replace(/\s/g, "");
+        row.A = +(row.A.replace(",", "."));
+        row.B = +(row.B.replace(",", "."));
+        row.C = +(row.C.replace(",", "."));
+        row.D = +(row.D.replace(",", "."));
         // ...and save it
         var price = new Price(row);
         return price.save();
@@ -46,5 +49,8 @@ fs.readFileAsync(process.env.PRICE_CSV_FILE, "utf8").then(data => {
 
 }).then(() => {
     logger.info("Done.");
+    
+}).finally(() => {
     process.exit();
-});
+
+})

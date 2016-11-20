@@ -2,8 +2,10 @@ var mongoose = require("mongoose");
 
 var schema = mongoose.Schema({
     product: String,
-    level: String,
-    price: Number
+    A: Number,
+    B: Number,
+    C: Number,
+    D: Number
 });
 
 module.exports = mongoose.model('Price', schema);
