@@ -9,16 +9,16 @@
   },
   "main": "server.js",
   "dependencies": {
-    "bluebird": "^3.4.6",
-    "botbuilder": "^3.4.4",
+    "bluebird": "^3.4.7",
+    "botbuilder": "^3.6.0",
     "botconnector": "^0.9.6",
-    "dotenv": "^2.0.0",
-    "mongodb": "^2.1.11",
-    "mongoose": "^4.6.8",
+    "dotenv": "^4.0.0",
+    "mongodb": "^2.2.24",
+    "mongoose": "^4.8.4",
     "restify": "^4.3.0",
-    "winston": "^2.3.0"
+    "winston": "^2.3.1"
   },
   "devDependencies": {
-    "csv-parse": "^1.1.7"
+    "csv-parse": "^1.2.0"
   }
 }
