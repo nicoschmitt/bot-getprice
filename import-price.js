@@ -16,8 +16,9 @@ var parseAsync = Promise.promisify(parse);
 var rows = [];
 var Price = {};
 
-logger.info("Import " + process.env.PRICE_CSV_FILE);
-fs.readFileAsync(process.env.PRICE_CSV_FILE, "utf8").then(data => {
+let file = process.env.PRICE_CSV_FILE || "prices.csv";
+logger.info("Import " + file);
+fs.readFileAsync(file, "utf8").then(data => {
     return parseAsync(data, { delimiter: ";", columns: true });
 
 }).then(csv => {
@@ -50,6 +51,9 @@ fs.readFileAsync(process.env.PRICE_CSV_FILE, "utf8").then(data => {
 }).then(() => {
     logger.info("Done.");
     
+}).catch(e => {
+    logger.error(e);
+
 }).finally(() => {
     process.exit();
 
